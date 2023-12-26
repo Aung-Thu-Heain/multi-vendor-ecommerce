@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-group col-md-12 col-12">
                         <label>Image</label>
-                        <input type="file" class="form-control" name="image"required="">
+                        <input type="file" class="form-control" name="image">
                         <div class="invalid-feedback">
                           Please fill in the image
                         </div>
