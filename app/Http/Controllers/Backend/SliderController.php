@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\DataTables\SlidersDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Slider;
+use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 
 class SliderController extends Controller
 {
+    use ImageUpload;
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(SlidersDataTable $dataTable)
     {
-        return view('admin.slider.index');
+        return $dataTable->render('admin.slider.index');
     }
 
     /**
@@ -30,7 +33,7 @@ class SliderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            // 'image' => ['required', 'image', 'max:2000'],
+            'image' => ['required', 'image', 'max:2000'],
             'type' => ['required', 'string'],
             'title' => ['required', 'string'],
             'price' => ['required', 'string'],
@@ -41,7 +44,8 @@ class SliderController extends Controller
         ]);
 
         $slider = new Slider();
-        $slider->image = $request->image;
+        $imageUrl = $this->imageUpload($request, 'image', 'uploads');
+        $slider->image = $imageUrl;
         $slider->type = $request->type;
         $slider->title = $request->title;
         $slider->price = $request->price;
@@ -69,7 +73,8 @@ class SliderController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $slider = Slider::findOrFail($id);
+        return view('admin.slider.edit', compact('slider'));
     }
 
     /**
@@ -77,7 +82,33 @@ class SliderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'image' => ['nullable', 'image', 'max:2000'],
+            'type' => ['required', 'string'],
+            'title' => ['required', 'string'],
+            'price' => ['required', 'string'],
+            'url' => ['required', 'url'],
+            'serial' => ['required', 'integer'],
+            'status' => ['required'],
+
+        ]);
+
+
+        $slider = Slider::findOrFail($id);
+        $imageUrl = $this->imageUpdate($request, 'image', 'uploads', $slider->image);
+        $slider->image = $imageUrl;
+        $slider->type = $request->type;
+        $slider->title = $request->title;
+        $slider->price = $request->price;
+        $slider->url = $request->url;
+        $slider->serial = $request->serial;
+        $slider->status = $request->status;
+
+        $slider->save();
+
+        toastr('Update slider successful', 'success');
+
+        return redirect()->route('admin.slider.index');
     }
 
     /**
@@ -85,6 +116,12 @@ class SliderController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $slider = Slider::findOrFail($id);
+
+        $this->imageDelete($slider->image);
+
+        $slider->delete();
+
+        return response(['status' => 'success', 'message' => 'Slider delete successfully']);
     }
 }

@@ -19,27 +19,27 @@
                 <div class="card-body">
                     <div class="form-group">
                          <label for="image">Banner image</label>
-                         <input type="file" name="image" id="image" class="form-control">
+                         <input type="file" name="image" id="image" value="{{old('image')}}" class="form-control">
                     </div>
                     <div class="form-group">
                          <label for="type">Type</label>
-                         <input type="text" name="type" id="type" class="form-control">
+                         <input type="text" name="type" id="type" class="form-control" value="{{old('type')}}">
                     </div>
                     <div class="form-group">
                          <label for="title">Title</label>
-                         <input type="text" name="title" id="title" class="form-control">
+                         <input type="text" name="title" id="title" class="form-control" value="{{old('title')}}">
                      </div>
                      <div class="form-group">
                          <label for="price">Starting price</label>
-                         <input type="text" name="price" id="price" class="form-control">
+                         <input type="text" name="price" id="price" class="form-control" value="{{old('price')}}">
                     </div>
                     <div class="form-group">
                          <label for="url">Button url</label>
-                         <input type="text" name="url" id="url" class="form-control">
+                         <input type="text" name="url" id="url" class="form-control" value="{{old('url')}}">
                      </div>
                      <div class="form-group">
                          <label for="serial">Serial</label>
-                         <input type="number" name="serial" id="serial" class="form-control">
+                         <input type="number" name="serial" id="serial" class="form-control" value="{{old('serial')}}">
                     </div>
                     <div class="form-select">
                          <label for="status">Status</label>

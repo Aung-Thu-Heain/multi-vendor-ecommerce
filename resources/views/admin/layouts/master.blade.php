@@ -21,6 +21,14 @@
 
   {{-- toast css --}}
   <link rel="stylesheet" href= "//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+   {{-- Datatable cdn link  --}}
+  <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+
+
+  {{-- sweet alert  --}}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- Start GA -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
 <script>
@@ -84,6 +92,12 @@
   <script src="{{asset("backend/assets/js/scripts.js")}}"></script>
   <script src="{{asset("backend/assets/js/custom.js")}}"></script>
 
+
+  {{-- datatable cnd  --}}
+  <script src="//cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+
   {{-- taost script  --}}
   <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
@@ -94,6 +108,63 @@
         toastr.error("{{$error}}")
         @endforeach
     @endif
+  </script>
+
+  {{--for data table @push tag --}}
+  @stack('dataTable')
+
+  {{-- delete item sweet alert  --}}
+  <script>
+    $(document).ready(function () {
+
+        $('body').on('click','.delete-item',function (e) {
+            e.preventDefault();
+            let deleteUrl = $(this).attr('href');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "DELETE",
+                    url: deleteUrl,
+                    data: {"_token":"{{csrf_token()}}"},
+
+                    success: function (response) {
+                         if(response.status == "success"){
+
+                                Swal.fire({
+                                title: "Success",
+                                text: response.message,
+                                icon: "success"
+                            });
+
+                            window.location.reload();
+
+                         }else if(response.status == "error"){
+                                Swal.fire({
+                                title: "Error",
+                                text: response.message,
+                            });
+                         }
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    },
+
+                });
+
+
+            }
+            });
+        });
+    });
   </script>
 </body>
 </html>
