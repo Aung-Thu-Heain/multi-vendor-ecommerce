@@ -23,14 +23,21 @@ class SlidersDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
-                $edit = "<a  href='" . route('admin.slider.edit', $query->id) . "' class='btn btn-primary '><i class='far fa-edit'></i>Edit</a>";
-                $delete = "<a href='" . route('admin.slider.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i>Delete</a>";
+                $edit = "<a  href='" . route('admin.slider.edit', $query->id) . "' class='btn btn-primary '><i class='far fa-edit'></i></a>";
+                $delete = "<a href='" . route('admin.slider.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
                 return $edit . $delete;
             })
             ->addColumn('image', function ($query) {
                 return $image = "<img style='width:100px' src='" . asset($query->image) . "'></img?";
             })
-            ->rawColumns(['image', 'action'])
+            ->addColumn('status', function ($query) {
+                if ($query->status == 1) {
+                    return "<span class='badge badge-info'>Active</span>";
+                } else {
+                    return "<span class='badge badge-danger'>Inactive</span>";
+                }
+            })
+            ->rawColumns(['image', 'action', 'status'])
             ->setRowId('id');
     }
 
@@ -76,15 +83,15 @@ class SlidersDataTable extends DataTable
             Column::make('type'),
             Column::make('title'),
             Column::make('price'),
-            Column::make('url'),
+            Column::make('url')
+                ->width(200)
+                ->addClass('w-200'),
             Column::make('serial'),
             Column::make('status'),
             Column::make('created_at'),
-            Column::make('updated_at'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(60)
                 ->addClass('text-center d-flex'),
         ];
     }

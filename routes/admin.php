@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AdminController;
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\SliderController;
 
 /** admin route */
@@ -14,3 +15,6 @@ Route::post('password/update', [AdminController::class, 'passwordUpdate'])->name
 
 /**slider route */
 Route::resource('slider', SliderController::class);
+
+/**category route */
+Route::resource('category', CategoryController::class);
